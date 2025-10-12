@@ -11,7 +11,7 @@ async fn test_cuf_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/cuf")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -35,7 +35,7 @@ async fn test_lcuf_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/lcuf")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -58,7 +58,7 @@ async fn test_dtc_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/dtc")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -81,7 +81,7 @@ async fn test_dte_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/dte")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -105,7 +105,7 @@ async fn test_ntp_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/ntp")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -129,7 +129,7 @@ async fn test_rel_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/rel")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -164,7 +164,7 @@ async fn test_fcl_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/fcl")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -200,7 +200,7 @@ async fn test_elf_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/elf")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -226,7 +226,7 @@ async fn test_car_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/car")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -252,7 +252,7 @@ async fn test_fcc_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/fcc")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -285,7 +285,7 @@ async fn test_fts_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/fts")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -311,7 +311,7 @@ async fn test_epp_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/epp")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -346,7 +346,7 @@ async fn test_fwe_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/fwe")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -368,7 +368,7 @@ async fn test_tep_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/tep")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -398,7 +398,7 @@ async fn test_enc_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/enc")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -428,7 +428,7 @@ async fn test_cec_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/cec")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -455,7 +455,7 @@ async fn test_clo_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/clo")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -489,7 +489,7 @@ async fn test_cse_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/cse")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -534,7 +534,7 @@ async fn test_pse_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/pse")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -578,7 +578,7 @@ async fn test_lbs_service() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/lbs")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
@@ -654,7 +654,7 @@ async fn test_authentication_error() {
     let mut server = Server::new_async().await;
     let _m = server
         .mock("POST", "/cuf")
-        .match_header("authorization", "Bearer test-api-key")
+        .match_header("x-api-key", "test-api-key")
         .with_status(401)
         .with_header("content-type", "application/json")
         .with_body(json!({

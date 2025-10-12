@@ -1,5 +1,5 @@
 use crate::error::{CufinderError, Result};
-use reqwest::{Client as ReqwestClient, header};
+use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 use std::time::Duration;
 
@@ -33,20 +33,8 @@ pub struct Client {
 impl Client {
     /// Create a new client with the given configuration
     pub fn new(config: ClientConfig) -> Result<Self> {
-        let mut headers = header::HeaderMap::new();
-        headers.insert(
-            header::AUTHORIZATION,
-            header::HeaderValue::from_str(&format!("Bearer {}", config.api_key))
-                .map_err(|e| CufinderError::ValidationError(format!("Invalid API key: {}", e)))?,
-        );
-        headers.insert(
-            header::CONTENT_TYPE,
-            header::HeaderValue::from_static("application/json"),
-        );
-
         let http_client = ReqwestClient::builder()
             .timeout(config.timeout)
-            .default_headers(headers)
             .build()
             .map_err(CufinderError::HttpError)?;
 
@@ -71,10 +59,17 @@ impl Client {
     {
         let url = format!("{}{}", self.config.base_url, endpoint);
         
+        // Convert data to form-encoded format
+        let form_data = serde_urlencoded::to_string(data)
+            .map_err(|e| CufinderError::ValidationError(format!("Failed to encode form data: {}", e)))?;
+        
         let response = self
             .http_client
             .post(&url)
-            .json(data)
+            .header("x-api-key", &self.config.api_key)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .header("User-Agent", "cufinder-rust/0.0.1")
+            .body(form_data)
             .send()
             .await
             .map_err(CufinderError::HttpError)?;
