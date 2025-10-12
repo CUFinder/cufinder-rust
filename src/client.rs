@@ -90,10 +90,24 @@ impl Client {
             };
         }
 
-        let json_response: serde_json::Value = response
+        let mut json_response: serde_json::Value = response
             .json()
             .await
             .map_err(CufinderError::HttpError)?;
+
+        // Check if the response has a "data" wrapper and extract it
+        if let Some(data_wrapper) = json_response.get("data") {
+            if let Some(meta_data) = json_response.get("meta_data") {
+                // Create a new object with data content plus meta_data
+                let mut data_obj = data_wrapper.clone();
+                if let serde_json::Value::Object(ref mut map) = data_obj {
+                    map.insert("meta_data".to_string(), meta_data.clone());
+                }
+                json_response = data_obj;
+            } else {
+                json_response = data_wrapper.clone();
+            }
+        }
 
         Ok(json_response)
     }
