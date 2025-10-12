@@ -10,4 +10,4 @@ pub use sdk::CufinderSDK;
 pub use types::*;
 
 /// SDK version
-pub const VERSION: &str = "0.0.1";
+pub const VERSION: &str = "1.0.0";

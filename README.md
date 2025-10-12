@@ -8,7 +8,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cufinder-rust = "0.0.1"
+cufinder-rust = "1.0.0"
 ```
 
 ## Usage
