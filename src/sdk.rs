@@ -181,4 +181,11 @@ impl CufinderSDK {
     pub async fn lbs(&self, params: LbsParams) -> Result<LbsResponse> {
         self.service.search_local_businesses(params).await
     }
+
+    /// BCD - B2B Customers Finder
+    pub async fn bcd(&self, url: &str) -> Result<BcdResponse> {
+        self.service.extract_b2b_customers(BcdParams {
+            url: url.to_string(),
+        }).await
+    }
 }

@@ -208,4 +208,14 @@ impl Service {
         let response = self.client.post("/lbs", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// BCD - B2B Customers Finder
+    pub async fn extract_b2b_customers(&self, params: BcdParams) -> Result<BcdResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/bcd", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

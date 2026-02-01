@@ -487,6 +487,13 @@ pub struct LbsResponse {
     pub companies: Vec<Company>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BcdResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub customers: Vec<String>,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -658,4 +665,9 @@ pub struct LbsParams {
     pub city: Option<String>,
     pub industry: Option<String>,
     pub page: Option<i32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BcdParams {
+    pub url: String,
 }
