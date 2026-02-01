@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## API Reference
 
-This SDK covers all 20 Cufinder API (v2) endpoints:
+This SDK covers all 28 Cufinder API (v2) endpoints:
 
 - **CUF** - [Company Name to Domain](https://apidoc.cufinder.io/apis/company-name-to-domain)
 - **LCUF** - [LinkedIn Company URL Finder](https://apidoc.cufinder.io/apis/company-linkedin-url-finder)
@@ -67,6 +67,14 @@ This SDK covers all 20 Cufinder API (v2) endpoints:
 - **CSE** - [Company Search](https://apidoc.cufinder.io/apis/company-search)
 - **PSE** - [Person Search](https://apidoc.cufinder.io/apis/person-search)
 - **LBS** - [Local Business Search (Google Maps Search API)](https://apidoc.cufinder.io/apis/local-business-search-google-maps-search-api)
+- **BCD** - [B2B Customers Finder](https://apidoc.cufinder.io/apis/b2b-customers-finder)
+- **CCP** - [Company Career Page Finder](https://apidoc.cufinder.io/apis/company-career-page-finder)
+- **ISC** - [Company Saas Checker](https://apidoc.cufinder.io/apis/company-saas-checker)
+- **CBC** - [Company B2B or B2C Checker](https://apidoc.cufinder.io/apis/company-b2b-or-b2c-checker)
+- **CSC** - [Company Mission Statement](https://apidoc.cufinder.io/apis/company-mission-statement)
+- **CSN** - [Company Snapshot](https://apidoc.cufinder.io/apis/company-snapshot)
+- **NAO** - [Phone Number Normalizer](https://apidoc.cufinder.io/apis/phone-number-normalizer)
+- **NAA** - [Address Normalizer](https://apidoc.cufinder.io/apis/address-normalizer)
 
 
 **CUF - Company Name to Domain**
@@ -267,6 +275,78 @@ let result = sdk.lbs(LbsParams {
     page: Some(1),
     ..Default::default()
 }).await?;
+println!("{:?}", result);
+```
+
+**BCD - B2B Customers Finder**
+
+Returns company's careers page
+
+```rust
+let result = sdk.bcd("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**CCP - Company Career Page Finder**
+
+Returns is company SaaS or not
+
+```rust
+let result = sdk.ccp("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**ISC - Company Saas Checker**
+
+Returns is company SaaS or not
+
+```rust
+let result = sdk.isc("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**CBC - Company B2B or B2C Checker**
+
+Returns company's business type
+
+```rust
+let result = sdk.cbc("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**CSC - Company Mission Statement**
+
+Returns company's mission statement
+
+```rust
+let result = sdk.csc("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**CSN - Company Snapshot**
+
+Returns company's snapshot information
+
+```rust
+let result = sdk.csn("stripe.com").await?;
+println!("{:?}", result);
+```
+
+**NAO - Phone Number Normalizer**
+
+Returns normalized phone
+
+```rust
+let result = sdk.nao("+18006676389").await?;
+println!("{:?}", result);
+```
+
+**NAA - Address Normalizer**
+
+Returns normalized address
+
+```rust
+let result = sdk.naa("1095 avenue of the Americas, 6th Avenue ny 10036").await?;
 println!("{:?}", result);
 ```
 
