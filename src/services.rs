@@ -278,4 +278,14 @@ impl Service {
         let response = self.client.post("/nao", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// NAA - Address Normalizer
+    pub async fn normalize_address(&self, params: NaaParams) -> Result<NaaResponse> {
+        if params.address.is_empty() {
+            return Err(CufinderError::ValidationError("address is required".to_string()));
+        }
+
+        let response = self.client.post("/naa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

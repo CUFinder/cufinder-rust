@@ -230,4 +230,11 @@ impl CufinderSDK {
             phone: phone.to_string(),
         }).await
     }
+
+    /// NAA - Address Normalizer
+    pub async fn naa(&self, address: &str) -> Result<NaaResponse> {
+        self.service.normalize_address(NaaParams {
+            address: address.to_string(),
+        }).await
+    }
 }
