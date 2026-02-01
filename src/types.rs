@@ -502,6 +502,14 @@ pub struct CcpResponse {
     pub careers_page_url: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IscResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "is_saas")]
+    pub is_saas: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -682,5 +690,10 @@ pub struct BcdParams {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CcpParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IscParams {
     pub url: String,
 }

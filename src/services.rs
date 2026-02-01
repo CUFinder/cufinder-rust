@@ -228,4 +228,14 @@ impl Service {
         let response = self.client.post("/ccp", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// ISC - Company Saas Checker
+    pub async fn is_saas(&self, params: IscParams) -> Result<IscResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/isc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

@@ -195,4 +195,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// ISC - Company Saas Checker
+    pub async fn isc(&self, url: &str) -> Result<IscResponse> {
+        self.service.is_saas(IscParams {
+            url: url.to_string(),
+        }).await
+    }
 }
