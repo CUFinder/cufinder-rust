@@ -202,4 +202,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// CBC - Company B2B or B2C Checker
+    pub async fn cbc(&self, url: &str) -> Result<CbcResponse> {
+        self.service.get_company_business_type(CbcParams {
+            url: url.to_string(),
+        }).await
+    }
 }
