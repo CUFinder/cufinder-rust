@@ -216,4 +216,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// CSN - Company Snapshot
+    pub async fn csn(&self, url: &str) -> Result<CsnResponse> {
+        self.service.get_company_snapshot(CsnParams {
+            url: url.to_string(),
+        }).await
+    }
 }

@@ -526,6 +526,26 @@ pub struct CscResponse {
     pub mission_statement: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnSnapshotInfo {
+    #[serde(rename = "icp")]
+    pub icp: Option<String>,
+    #[serde(rename = "target_industries")]
+    pub target_industries: Option<Vec<String>>,
+    #[serde(rename = "target_personas")]
+    pub target_personas: Option<Vec<String>>,
+    #[serde(rename = "value_proposition")]
+    pub value_proposition: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "company_snapshot")]
+    pub company_snapshot: CsnSnapshotInfo,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -721,5 +741,10 @@ pub struct CbcParams {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CscParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnParams {
     pub url: String,
 }

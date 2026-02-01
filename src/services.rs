@@ -258,4 +258,14 @@ impl Service {
         let response = self.client.post("/csc", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CSN - Company Snapshot
+    pub async fn get_company_snapshot(&self, params: CsnParams) -> Result<CsnResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/csn", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }
