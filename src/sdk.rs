@@ -223,4 +223,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// NAO - Phone Number Normalizer
+    pub async fn nao(&self, phone: &str) -> Result<NaoResponse> {
+        self.service.normalize_phone(NaoParams {
+            phone: phone.to_string(),
+        }).await
+    }
 }

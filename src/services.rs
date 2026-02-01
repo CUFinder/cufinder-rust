@@ -268,4 +268,14 @@ impl Service {
         let response = self.client.post("/csn", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// NAO - Phone Number Normalizer
+    pub async fn normalize_phone(&self, params: NaoParams) -> Result<NaoResponse> {
+        if params.phone.is_empty() {
+            return Err(CufinderError::ValidationError("phone is required".to_string()));
+        }
+
+        let response = self.client.post("/nao", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

@@ -546,6 +546,13 @@ pub struct CsnResponse {
     pub company_snapshot: CsnSnapshotInfo,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaoResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub phone: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -747,4 +754,9 @@ pub struct CscParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CsnParams {
     pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaoParams {
+    pub phone: String,
 }
