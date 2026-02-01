@@ -209,4 +209,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// CSC - Company Mission Statement
+    pub async fn csc(&self, url: &str) -> Result<CscResponse> {
+        self.service.get_company_mission_statement(CscParams {
+            url: url.to_string(),
+        }).await
+    }
 }

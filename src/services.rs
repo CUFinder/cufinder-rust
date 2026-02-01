@@ -248,4 +248,14 @@ impl Service {
         let response = self.client.post("/cbc", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CSC - Company Mission Statement
+    pub async fn get_company_mission_statement(&self, params: CscParams) -> Result<CscResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/csc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

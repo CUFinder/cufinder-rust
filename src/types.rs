@@ -518,6 +518,14 @@ pub struct CbcResponse {
     pub business_type: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CscResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "mission_statement")]
+    pub mission_statement: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -708,5 +716,10 @@ pub struct IscParams {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CbcParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CscParams {
     pub url: String,
 }
