@@ -208,4 +208,84 @@ impl Service {
         let response = self.client.post("/lbs", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// BCD - B2B Customers Finder
+    pub async fn extract_b2b_customers(&self, params: BcdParams) -> Result<BcdResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/bcd", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CCP - Company Career Page Finder
+    pub async fn find_company_careers_page(&self, params: CcpParams) -> Result<CcpResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/ccp", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// ISC - Company Saas Checker
+    pub async fn is_saas(&self, params: IscParams) -> Result<IscResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/isc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CBC - Company B2B or B2C Checker
+    pub async fn get_company_business_type(&self, params: CbcParams) -> Result<CbcResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/cbc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CSC - Company Mission Statement
+    pub async fn get_company_mission_statement(&self, params: CscParams) -> Result<CscResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/csc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CSN - Company Snapshot
+    pub async fn get_company_snapshot(&self, params: CsnParams) -> Result<CsnResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/csn", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// NAO - Phone Number Normalizer
+    pub async fn normalize_phone(&self, params: NaoParams) -> Result<NaoResponse> {
+        if params.phone.is_empty() {
+            return Err(CufinderError::ValidationError("phone is required".to_string()));
+        }
+
+        let response = self.client.post("/nao", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// NAA - Address Normalizer
+    pub async fn normalize_address(&self, params: NaaParams) -> Result<NaaResponse> {
+        if params.address.is_empty() {
+            return Err(CufinderError::ValidationError("address is required".to_string()));
+        }
+
+        let response = self.client.post("/naa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

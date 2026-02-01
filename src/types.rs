@@ -487,6 +487,79 @@ pub struct LbsResponse {
     pub companies: Vec<Company>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BcdResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub customers: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcpResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "careers_page_url")]
+    pub careers_page_url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IscResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "is_saas")]
+    pub is_saas: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CbcResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "business_type")]
+    pub business_type: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CscResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "mission_statement")]
+    pub mission_statement: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnSnapshotInfo {
+    #[serde(rename = "icp")]
+    pub icp: Option<String>,
+    #[serde(rename = "target_industries")]
+    pub target_industries: Option<Vec<String>>,
+    #[serde(rename = "target_personas")]
+    pub target_personas: Option<Vec<String>>,
+    #[serde(rename = "value_proposition")]
+    pub value_proposition: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "company_snapshot")]
+    pub company_snapshot: CsnSnapshotInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaoResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub phone: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub address: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -658,4 +731,44 @@ pub struct LbsParams {
     pub city: Option<String>,
     pub industry: Option<String>,
     pub page: Option<i32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BcdParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcpParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IscParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CbcParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CscParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsnParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaoParams {
+    pub phone: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NaaParams {
+    pub address: String,
 }

@@ -181,4 +181,60 @@ impl CufinderSDK {
     pub async fn lbs(&self, params: LbsParams) -> Result<LbsResponse> {
         self.service.search_local_businesses(params).await
     }
+
+    /// BCD - B2B Customers Finder
+    pub async fn bcd(&self, url: &str) -> Result<BcdResponse> {
+        self.service.extract_b2b_customers(BcdParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// CCP - Company Career Page Finder
+    pub async fn ccp(&self, url: &str) -> Result<CcpResponse> {
+        self.service.find_company_careers_page(CcpParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// ISC - Company Saas Checker
+    pub async fn isc(&self, url: &str) -> Result<IscResponse> {
+        self.service.is_saas(IscParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// CBC - Company B2B or B2C Checker
+    pub async fn cbc(&self, url: &str) -> Result<CbcResponse> {
+        self.service.get_company_business_type(CbcParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// CSC - Company Mission Statement
+    pub async fn csc(&self, url: &str) -> Result<CscResponse> {
+        self.service.get_company_mission_statement(CscParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// CSN - Company Snapshot
+    pub async fn csn(&self, url: &str) -> Result<CsnResponse> {
+        self.service.get_company_snapshot(CsnParams {
+            url: url.to_string(),
+        }).await
+    }
+
+    /// NAO - Phone Number Normalizer
+    pub async fn nao(&self, phone: &str) -> Result<NaoResponse> {
+        self.service.normalize_phone(NaoParams {
+            phone: phone.to_string(),
+        }).await
+    }
+
+    /// NAA - Address Normalizer
+    pub async fn naa(&self, address: &str) -> Result<NaaResponse> {
+        self.service.normalize_address(NaaParams {
+            address: address.to_string(),
+        }).await
+    }
 }
