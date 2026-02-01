@@ -218,4 +218,14 @@ impl Service {
         let response = self.client.post("/bcd", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CCP - Company Career Page Finder
+    pub async fn find_company_careers_page(&self, params: CcpParams) -> Result<CcpResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/ccp", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

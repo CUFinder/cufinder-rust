@@ -188,4 +188,11 @@ impl CufinderSDK {
             url: url.to_string(),
         }).await
     }
+
+    /// CCP - Company Career Page Finder
+    pub async fn ccp(&self, url: &str) -> Result<CcpResponse> {
+        self.service.find_company_careers_page(CcpParams {
+            url: url.to_string(),
+        }).await
+    }
 }

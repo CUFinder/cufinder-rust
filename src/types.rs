@@ -494,6 +494,14 @@ pub struct BcdResponse {
     pub customers: Vec<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcpResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "careers_page_url")]
+    pub careers_page_url: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -669,5 +677,10 @@ pub struct LbsParams {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BcdParams {
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CcpParams {
     pub url: String,
 }
