@@ -68,7 +68,7 @@ impl Client {
             .post(&url)
             .header("x-api-key", &self.config.api_key)
             .header("Content-Type", "application/x-www-form-urlencoded")
-            .header("User-Agent", "cufinder-rust/1.0.0")
+            .header("User-Agent", "cufinder-rust/1.1.0")
             .body(form_data)
             .send()
             .await
