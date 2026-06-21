@@ -288,4 +288,14 @@ impl Service {
         let response = self.client.post("/naa", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CEF Service - Company Employee Finder
+    pub async fn find_company_employees(&self, params: CefParams) -> Result<CefResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/cef", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

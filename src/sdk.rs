@@ -237,4 +237,12 @@ impl CufinderSDK {
             address: address.to_string(),
         }).await
     }
+
+    /// CEF - Company Employee Finder
+    pub async fn cef(&self, query: &str, page: Option<i32>) -> Result<CefResponse> {
+        self.service.find_company_employees(CefParams {
+            query: query.to_string(),
+            page,
+        }).await
+    }
 }

@@ -560,6 +560,54 @@ pub struct NaaResponse {
     pub address: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CefEmployee {
+    #[serde(rename = "full_name")]
+    pub full_name: Option<String>,
+    #[serde(rename = "first_name")]
+    pub first_name: Option<String>,
+    #[serde(rename = "last_name")]
+    pub last_name: Option<String>,
+    #[serde(rename = "linkedin_url")]
+    pub linkedin_url: Option<String>,
+    pub summary: Option<String>,
+    pub avatar: Option<String>,
+    pub country: Option<String>,
+    pub state: Option<String>,
+    pub city: Option<String>,
+    #[serde(rename = "job_title")]
+    pub job_title: Option<String>,
+    #[serde(rename = "job_title_categories")]
+    pub job_title_categories: Option<Vec<String>>,
+    #[serde(rename = "company_name")]
+    pub company_name: Option<String>,
+    #[serde(rename = "company_linkedin")]
+    pub company_linkedin: Option<String>,
+    #[serde(rename = "company_website")]
+    pub company_website: Option<String>,
+    #[serde(rename = "company_size")]
+    pub company_size: Option<String>,
+    #[serde(rename = "company_industry")]
+    pub company_industry: Option<String>,
+    #[serde(rename = "company_facebook")]
+    pub company_facebook: Option<String>,
+    #[serde(rename = "company_twitter")]
+    pub company_twitter: Option<String>,
+    #[serde(rename = "company_country")]
+    pub company_country: Option<String>,
+    #[serde(rename = "company_state")]
+    pub company_state: Option<String>,
+    #[serde(rename = "company_city")]
+    pub company_city: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CefResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub employees: Vec<CefEmployee>,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -771,4 +819,10 @@ pub struct NaoParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NaaParams {
     pub address: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CefParams {
+    pub query: String,
+    pub page: Option<i32>,
 }
