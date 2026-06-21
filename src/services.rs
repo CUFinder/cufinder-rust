@@ -318,4 +318,10 @@ impl Service {
         let response = self.client.post("/caa", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CJA Service - Company Jobs API
+    pub async fn get_company_jobs(&self, params: CjaParams) -> Result<CjaResponse> {
+        let response = self.client.post("/cja", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

@@ -260,4 +260,9 @@ impl CufinderSDK {
             page,
         }).await
     }
+
+    /// CJA - Company Jobs API
+    pub async fn cja(&self, params: CjaParams) -> Result<CjaResponse> {
+        self.service.get_company_jobs(params).await
+    }
 }

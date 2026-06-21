@@ -658,6 +658,64 @@ pub struct CaaResponse {
     pub activities: Vec<CaaActivity>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaCompanyEmployees {
+    pub range: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaCompanyMainLocation {
+    pub country: Option<String>,
+    pub state: Option<String>,
+    pub city: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaCompany {
+    pub name: Option<String>,
+    pub industry: Option<String>,
+    pub website: Option<String>,
+    pub linkedin: Option<String>,
+    #[serde(rename = "followers_count")]
+    pub followers_count: Option<i32>,
+    pub employees: Option<CjaCompanyEmployees>,
+    #[serde(rename = "founded_date")]
+    pub founded_date: Option<String>,
+    #[serde(rename = "annual_revenue")]
+    pub annual_revenue: Option<String>,
+    #[serde(rename = "funding_amount")]
+    pub funding_amount: Option<String>,
+    #[serde(rename = "main_location")]
+    pub main_location: Option<CjaCompanyMainLocation>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaJob {
+    #[serde(rename = "job_id")]
+    pub job_id: Option<String>,
+    pub title: Option<String>,
+    pub url: Option<String>,
+    pub location: Option<String>,
+    #[serde(rename = "posted_at")]
+    pub posted_at: Option<String>,
+    #[serde(rename = "posted_at_text")]
+    pub posted_at_text: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaJobItem {
+    pub company: CjaCompany,
+    pub job: CjaJob,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CjaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub jobs: Vec<CjaJobItem>,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -885,5 +943,37 @@ pub struct NacParams {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CaaParams {
     pub query: String,
+    pub page: Option<i32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CjaParams {
+    pub name: Option<String>,
+    pub country: Option<String>,
+    pub state: Option<String>,
+    pub city: Option<String>,
+    #[serde(rename = "followers_count_min")]
+    pub followers_count_min: Option<i32>,
+    #[serde(rename = "followers_count_max")]
+    pub followers_count_max: Option<i32>,
+    pub industry: Option<String>,
+    #[serde(rename = "employee_size")]
+    pub employee_size: Option<String>,
+    #[serde(rename = "founded_after_year")]
+    pub founded_after_year: Option<i32>,
+    #[serde(rename = "founded_before_year")]
+    pub founded_before_year: Option<i32>,
+    #[serde(rename = "funding_amount_max")]
+    pub funding_amount_max: Option<i32>,
+    #[serde(rename = "funding_amount_min")]
+    pub funding_amount_min: Option<i32>,
+    #[serde(rename = "products_services")]
+    pub products_services: Option<Vec<String>>,
+    #[serde(rename = "is_school")]
+    pub is_school: Option<bool>,
+    #[serde(rename = "annual_revenue_min")]
+    pub annual_revenue_min: Option<i32>,
+    #[serde(rename = "annual_revenue_max")]
+    pub annual_revenue_max: Option<i32>,
     pub page: Option<i32>,
 }
