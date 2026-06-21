@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## API Reference
 
-This SDK covers all 28 Cufinder API (v2) endpoints:
+This SDK covers all 32 Cufinder API (v2) endpoints:
 
 - **CUF** - [Company Name to Domain](https://apidoc.cufinder.io/apis/company-name-to-domain)
 - **LCUF** - [LinkedIn Company URL Finder](https://apidoc.cufinder.io/apis/company-linkedin-url-finder)
@@ -75,6 +75,10 @@ This SDK covers all 28 Cufinder API (v2) endpoints:
 - **CSN** - [Company Snapshot](https://apidoc.cufinder.io/apis/company-snapshot)
 - **NAO** - [Phone Number Normalizer](https://apidoc.cufinder.io/apis/phone-number-normalizer)
 - **NAA** - [Address Normalizer](https://apidoc.cufinder.io/apis/address-normalizer)
+- **CEF** - [Company Employee Finder](https://apidoc.cufinder.io/apis/company-employee-finder)
+- **NAC** - [Company Name Normalizer](https://apidoc.cufinder.io/apis/company-name-normalizer)
+- **CAA** - [Company Activity API](https://apidoc.cufinder.io/apis/company-activity-api)
+- **CJA** - [Company Jobs API](https://apidoc.cufinder.io/apis/company-jobs-api)
 
 
 **CUF - Company Name to Domain**
@@ -348,6 +352,54 @@ Returns normalized address
 ```rust
 let result = sdk.naa("1095 avenue of the Americas, 6th Avenue ny 10036").await?;
 println!("{:?}", result);
+```
+
+**CEF - Company Employee Finder**
+
+Returns a list of employees for a given company.
+
+```rust
+let result = sdk.cef("cufinder", Some(1)).await?;
+for emp in &result.employees {
+    println!("{:?} - {:?}", emp.full_name, emp.job_title);
+}
+```
+
+**NAC - Company Name Normalizer**
+
+Normalizes a company name to its canonical form.
+
+```rust
+let result = sdk.nac("cufinder inc.").await?;
+println!("{:?}", result.company);
+```
+
+**CAA - Company Activity API**
+
+Returns recent LinkedIn activities for a company.
+
+```rust
+let result = sdk.caa("cufinder", Some(1)).await?;
+for act in &result.activities {
+    println!("{:?}", act.activity_headline);
+}
+```
+
+**CJA - Company Jobs API**
+
+Search for company job listings.
+
+```rust
+use cufinder_rust::CjaParams;
+
+let result = sdk.cja(CjaParams {
+    name: Some("google".to_string()),
+    page: Some(1),
+    ..Default::default()
+}).await?;
+for item in &result.jobs {
+    println!("{:?} - {:?}", item.company.name, item.job.title);
+}
 ```
 
 ## Error Handling
