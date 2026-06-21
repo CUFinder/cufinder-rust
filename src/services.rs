@@ -288,4 +288,40 @@ impl Service {
         let response = self.client.post("/naa", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CEF Service - Company Employee Finder
+    pub async fn find_company_employees(&self, params: CefParams) -> Result<CefResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/cef", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// NAC Service - Normalize Company Name
+    pub async fn normalize_company_name(&self, params: NacParams) -> Result<NacResponse> {
+        if params.company.is_empty() {
+            return Err(CufinderError::ValidationError("company is required".to_string()));
+        }
+
+        let response = self.client.post("/nac", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CAA Service - Company Activity API
+    pub async fn get_company_activities(&self, params: CaaParams) -> Result<CaaResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/caa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CJA Service - Company Jobs API
+    pub async fn get_company_jobs(&self, params: CjaParams) -> Result<CjaResponse> {
+        let response = self.client.post("/cja", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

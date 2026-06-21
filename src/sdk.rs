@@ -237,4 +237,32 @@ impl CufinderSDK {
             address: address.to_string(),
         }).await
     }
+
+    /// CEF - Company Employee Finder
+    pub async fn cef(&self, query: &str, page: Option<i32>) -> Result<CefResponse> {
+        self.service.find_company_employees(CefParams {
+            query: query.to_string(),
+            page,
+        }).await
+    }
+
+    /// NAC - Normalize Company Name
+    pub async fn nac(&self, company: &str) -> Result<NacResponse> {
+        self.service.normalize_company_name(NacParams {
+            company: company.to_string(),
+        }).await
+    }
+
+    /// CAA - Company Activity API
+    pub async fn caa(&self, query: &str, page: Option<i32>) -> Result<CaaResponse> {
+        self.service.get_company_activities(CaaParams {
+            query: query.to_string(),
+            page,
+        }).await
+    }
+
+    /// CJA - Company Jobs API
+    pub async fn cja(&self, params: CjaParams) -> Result<CjaResponse> {
+        self.service.get_company_jobs(params).await
+    }
 }

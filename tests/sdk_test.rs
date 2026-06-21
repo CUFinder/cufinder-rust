@@ -671,6 +671,106 @@ async fn test_authentication_error() {
     }
 }
 
+#[tokio::test]
+async fn test_cef_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/cef")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "employees": [
+                {
+                    "full_name": "John Doe",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "linkedin_url": "https://linkedin.com/in/john-doe",
+                    "job_title": "Software Engineer",
+                    "company_name": "TechCorp",
+                    "company_industry": "Technology",
+                    "country": "US",
+                    "state": "CA",
+                    "city": "San Francisco"
+                },
+                {
+                    "full_name": "Jane Smith",
+                    "first_name": "Jane",
+                    "last_name": "Smith",
+                    "linkedin_url": "https://linkedin.com/in/jane-smith",
+                    "job_title": "Product Manager",
+                    "company_name": "TechCorp",
+                    "company_industry": "Technology",
+                    "country": "US",
+                    "state": "CA",
+                    "city": "San Francisco"
+                }
+            ],
+            "query": "TechCorp",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.cef("TechCorp", None).await.unwrap();
+
+    assert_eq!(result.employees.len(), 2);
+    assert_eq!(result.employees[0].full_name, Some("John Doe".to_string()));
+    assert_eq!(result.employees[0].first_name, Some("John".to_string()));
+    assert_eq!(result.employees[0].last_name, Some("Doe".to_string()));
+    assert_eq!(result.employees[0].job_title, Some("Software Engineer".to_string()));
+    assert_eq!(result.employees[0].company_name, Some("TechCorp".to_string()));
+    assert_eq!(result.employees[0].country, Some("US".to_string()));
+    assert_eq!(result.employees[0].state, Some("CA".to_string()));
+    assert_eq!(result.employees[0].city, Some("San Francisco".to_string()));
+    assert_eq!(result.employees[1].full_name, Some("Jane Smith".to_string()));
+    assert_eq!(result.employees[1].job_title, Some("Product Manager".to_string()));
+    assert_eq!(result.base.query, Some("TechCorp".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_cef_service_with_page() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/cef")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "employees": [
+                {
+                    "full_name": "Bob Johnson",
+                    "first_name": "Bob",
+                    "last_name": "Johnson",
+                    "job_title": "DevOps Engineer",
+                    "company_name": "TechCorp"
+                }
+            ],
+            "query": "TechCorp",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.cef("TechCorp", Some(2)).await.unwrap();
+
+    assert_eq!(result.employees.len(), 1);
+    assert_eq!(result.employees[0].full_name, Some("Bob Johnson".to_string()));
+}
+
+#[tokio::test]
+async fn test_cef_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.cef("", None).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("query is required"));
+    }
+}
+
 async fn create_test_sdk(base_url: &str) -> CufinderSDK {
     CufinderSDK::with_config(ClientConfig {
         api_key: "test-api-key".to_string(),
