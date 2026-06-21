@@ -608,6 +608,13 @@ pub struct CefResponse {
     pub employees: Vec<CefEmployee>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NacResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub company: String,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -825,4 +832,9 @@ pub struct NaaParams {
 pub struct CefParams {
     pub query: String,
     pub page: Option<i32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NacParams {
+    pub company: String,
 }

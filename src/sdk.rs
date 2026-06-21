@@ -245,4 +245,11 @@ impl CufinderSDK {
             page,
         }).await
     }
+
+    /// NAC - Normalize Company Name
+    pub async fn nac(&self, company: &str) -> Result<NacResponse> {
+        self.service.normalize_company_name(NacParams {
+            company: company.to_string(),
+        }).await
+    }
 }

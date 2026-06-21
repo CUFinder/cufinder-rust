@@ -298,4 +298,14 @@ impl Service {
         let response = self.client.post("/cef", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// NAC Service - Normalize Company Name
+    pub async fn normalize_company_name(&self, params: NacParams) -> Result<NacResponse> {
+        if params.company.is_empty() {
+            return Err(CufinderError::ValidationError("company is required".to_string()));
+        }
+
+        let response = self.client.post("/nac", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }
