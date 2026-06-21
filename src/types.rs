@@ -615,6 +615,49 @@ pub struct NacResponse {
     pub company: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CaaActivity {
+    #[serde(rename = "activity_url")]
+    pub activity_url: Option<String>,
+    #[serde(rename = "activity_id")]
+    pub activity_id: Option<String>,
+    #[serde(rename = "author_name")]
+    pub author_name: Option<String>,
+    #[serde(rename = "author_type")]
+    pub author_type: Option<String>,
+    #[serde(rename = "author_url")]
+    pub author_url: Option<String>,
+    #[serde(rename = "activity_comments_count")]
+    pub activity_comments_count: Option<i32>,
+    #[serde(rename = "activity_hashtags")]
+    pub activity_hashtags: Option<Vec<String>>,
+    #[serde(rename = "activity_headline")]
+    pub activity_headline: Option<String>,
+    #[serde(rename = "activity_images")]
+    pub activity_images: Option<Vec<String>>,
+    #[serde(rename = "activity_is_video")]
+    pub activity_is_video: Option<bool>,
+    #[serde(rename = "activity_posted_at")]
+    pub activity_posted_at: Option<String>,
+    #[serde(rename = "activity_reactions_count")]
+    pub activity_reactions_count: Option<i32>,
+    #[serde(rename = "activity_reposts_count")]
+    pub activity_reposts_count: Option<i32>,
+    #[serde(rename = "activity_text")]
+    pub activity_text: Option<String>,
+    #[serde(rename = "activity_top_comments")]
+    pub activity_top_comments: Option<Vec<String>>,
+    #[serde(rename = "activity_videos")]
+    pub activity_videos: Option<Vec<String>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CaaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    pub activities: Vec<CaaActivity>,
+}
+
 // Parameter types for each service
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CufParams {
@@ -837,4 +880,10 @@ pub struct CefParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NacParams {
     pub company: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CaaParams {
+    pub query: String,
+    pub page: Option<i32>,
 }

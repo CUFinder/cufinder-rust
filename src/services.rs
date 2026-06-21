@@ -308,4 +308,14 @@ impl Service {
         let response = self.client.post("/nac", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CAA Service - Company Activity API
+    pub async fn get_company_activities(&self, params: CaaParams) -> Result<CaaResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/caa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

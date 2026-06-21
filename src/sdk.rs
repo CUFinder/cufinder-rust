@@ -252,4 +252,12 @@ impl CufinderSDK {
             company: company.to_string(),
         }).await
     }
+
+    /// CAA - Company Activity API
+    pub async fn caa(&self, query: &str, page: Option<i32>) -> Result<CaaResponse> {
+        self.service.get_company_activities(CaaParams {
+            query: query.to_string(),
+            page,
+        }).await
+    }
 }
