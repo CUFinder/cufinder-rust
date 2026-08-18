@@ -350,4 +350,17 @@ impl Service {
         let response = self.client.post("/csa", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// JCA Service - Job Changes API
+    pub async fn get_job_changes(&self, params: JcaParams) -> Result<JcaResponse> {
+        if params.start_date.is_empty() {
+            return Err(CufinderError::ValidationError("start_date is required".to_string()));
+        }
+        if params.end_date.is_empty() {
+            return Err(CufinderError::ValidationError("end_date is required".to_string()));
+        }
+
+        let response = self.client.post("/jca", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

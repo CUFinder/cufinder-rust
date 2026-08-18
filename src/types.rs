@@ -1050,3 +1050,47 @@ pub struct CsaParams {
     pub bucket: String,
     pub page: Option<i32>,
 }
+
+// JCA Service - Job Changes API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JobChangeCompanySnapshot {
+    #[serde(rename = "company_linkedin_url")]
+    pub company_linkedin_url: Option<String>,
+    #[serde(rename = "company_linkedin_id")]
+    pub company_linkedin_id: Option<String>,
+    #[serde(rename = "company_name")]
+    pub company_name: Option<String>,
+    pub title: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JobChange {
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    #[serde(rename = "linkedin_url")]
+    pub linkedin_url: Option<String>,
+    #[serde(rename = "detected_at")]
+    pub detected_at: Option<String>,
+    pub from: Option<JobChangeCompanySnapshot>,
+    pub to: Option<JobChangeCompanySnapshot>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JcaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "job_changes")]
+    #[serde(default)]
+    pub job_changes: Vec<JobChange>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct JcaParams {
+    #[serde(rename = "start_date")]
+    pub start_date: String,
+    #[serde(rename = "end_date")]
+    pub end_date: String,
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    pub page: Option<i32>,
+}
