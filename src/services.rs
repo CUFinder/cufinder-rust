@@ -324,4 +324,17 @@ impl Service {
         let response = self.client.post("/cja", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// PSA Service - Contact Signals API
+    pub async fn get_contact_signals(&self, params: PsaParams) -> Result<PsaResponse> {
+        if params.signal_name.is_empty() {
+            return Err(CufinderError::ValidationError("signal_name is required".to_string()));
+        }
+        if params.bucket.is_empty() {
+            return Err(CufinderError::ValidationError("bucket is required".to_string()));
+        }
+
+        let response = self.client.post("/psa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

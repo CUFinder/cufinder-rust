@@ -977,3 +977,41 @@ pub struct CjaParams {
     pub annual_revenue_max: Option<i32>,
     pub page: Option<i32>,
 }
+// PSA Service - Contact Signals API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Signal {
+    pub name: Option<String>,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContactSignal {
+    #[serde(rename = "full_name")]
+    pub full_name: Option<String>,
+    #[serde(rename = "current_job")]
+    pub current_job: Option<serde_json::Value>,
+    pub company: Option<serde_json::Value>,
+    pub location: Option<serde_json::Value>,
+    pub social: Option<serde_json::Value>,
+    pub signal: Option<Signal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PsaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub contacts: Vec<ContactSignal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct PsaParams {
+    #[serde(rename = "signal_name")]
+    pub signal_name: String,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: String,
+    pub page: Option<i32>,
+}
