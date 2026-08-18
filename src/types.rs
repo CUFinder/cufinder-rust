@@ -1015,3 +1015,38 @@ pub struct PsaParams {
     pub bucket: String,
     pub page: Option<i32>,
 }
+
+// CSA Service - Company Signals API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompanySignal {
+    pub name: Option<String>,
+    pub website: Option<String>,
+    pub domain: Option<String>,
+    pub employees: Option<serde_json::Value>,
+    pub industry: Option<String>,
+    pub overview: Option<String>,
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    #[serde(rename = "main_location")]
+    pub main_location: Option<serde_json::Value>,
+    pub social: Option<serde_json::Value>,
+    pub signal: Option<Signal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub companies: Vec<CompanySignal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CsaParams {
+    #[serde(rename = "signal_name")]
+    pub signal_name: String,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: String,
+    pub page: Option<i32>,
+}

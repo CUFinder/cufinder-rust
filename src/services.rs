@@ -337,4 +337,17 @@ impl Service {
         let response = self.client.post("/psa", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CSA Service - Company Signals API
+    pub async fn get_company_signals(&self, params: CsaParams) -> Result<CsaResponse> {
+        if params.signal_name.is_empty() {
+            return Err(CufinderError::ValidationError("signal_name is required".to_string()));
+        }
+        if params.bucket.is_empty() {
+            return Err(CufinderError::ValidationError("bucket is required".to_string()));
+        }
+
+        let response = self.client.post("/csa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

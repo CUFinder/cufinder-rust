@@ -270,4 +270,9 @@ impl CufinderSDK {
     pub async fn psa(&self, params: PsaParams) -> Result<PsaResponse> {
         self.service.get_contact_signals(params).await
     }
+
+    /// CSA - Company Signals API
+    pub async fn csa(&self, params: CsaParams) -> Result<CsaResponse> {
+        self.service.get_company_signals(params).await
+    }
 }
