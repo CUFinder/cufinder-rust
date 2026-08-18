@@ -280,4 +280,9 @@ impl CufinderSDK {
     pub async fn jca(&self, params: JcaParams) -> Result<JcaResponse> {
         self.service.get_job_changes(params).await
     }
+
+    /// CLF - Contact Lookalikes API
+    pub async fn clf(&self, params: ClfParams) -> Result<ClfResponse> {
+        self.service.find_contact_lookalikes(params).await
+    }
 }

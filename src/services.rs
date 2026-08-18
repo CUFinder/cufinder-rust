@@ -363,4 +363,14 @@ impl Service {
         let response = self.client.post("/jca", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// CLF Service - Contact Lookalikes API
+    pub async fn find_contact_lookalikes(&self, params: ClfParams) -> Result<ClfResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/clf", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

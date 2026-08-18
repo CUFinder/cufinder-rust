@@ -1094,3 +1094,62 @@ pub struct JcaParams {
     pub r#type: Option<String>,
     pub page: Option<i32>,
 }
+
+// CLF Service - Contact Lookalikes API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClfProfile {
+    #[serde(rename = "first_name")]
+    pub first_name: Option<String>,
+    #[serde(rename = "last_name")]
+    pub last_name: Option<String>,
+    #[serde(rename = "full_name")]
+    pub full_name: Option<String>,
+    #[serde(rename = "linkedin_url")]
+    pub linkedin_url: Option<String>,
+    pub summary: Option<String>,
+    #[serde(rename = "followers_count")]
+    pub followers_count: Option<i32>,
+    pub facebook: Option<String>,
+    pub twitter: Option<String>,
+    pub avatar: Option<String>,
+    pub country: Option<String>,
+    pub state: Option<String>,
+    pub city: Option<String>,
+    #[serde(rename = "job_title")]
+    pub job_title: Option<String>,
+    #[serde(rename = "job_title_categories")]
+    pub job_title_categories: Option<Vec<String>>,
+    #[serde(rename = "company_name")]
+    pub company_name: Option<String>,
+    #[serde(rename = "company_linkedin")]
+    pub company_linkedin: Option<String>,
+    #[serde(rename = "company_website")]
+    pub company_website: Option<String>,
+    #[serde(rename = "company_size")]
+    pub company_size: Option<String>,
+    #[serde(rename = "company_industry")]
+    pub company_industry: Option<String>,
+    #[serde(rename = "company_facebook")]
+    pub company_facebook: Option<String>,
+    #[serde(rename = "company_twitter")]
+    pub company_twitter: Option<String>,
+    #[serde(rename = "company_country")]
+    pub company_country: Option<String>,
+    #[serde(rename = "company_state")]
+    pub company_state: Option<String>,
+    #[serde(rename = "company_city")]
+    pub company_city: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClfResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub profiles: Vec<ClfProfile>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ClfParams {
+    pub query: String,
+}
