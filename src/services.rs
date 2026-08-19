@@ -324,4 +324,93 @@ impl Service {
         let response = self.client.post("/cja", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// PSA Service - Contact Signals API
+    pub async fn get_contact_signals(&self, params: PsaParams) -> Result<PsaResponse> {
+        if params.signal_name.is_empty() {
+            return Err(CufinderError::ValidationError("signal_name is required".to_string()));
+        }
+        if params.bucket.is_empty() {
+            return Err(CufinderError::ValidationError("bucket is required".to_string()));
+        }
+
+        let response = self.client.post("/psa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CSA Service - Company Signals API
+    pub async fn get_company_signals(&self, params: CsaParams) -> Result<CsaResponse> {
+        if params.signal_name.is_empty() {
+            return Err(CufinderError::ValidationError("signal_name is required".to_string()));
+        }
+        if params.bucket.is_empty() {
+            return Err(CufinderError::ValidationError("bucket is required".to_string()));
+        }
+
+        let response = self.client.post("/csa", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// JCA Service - Job Changes API
+    pub async fn get_job_changes(&self, params: JcaParams) -> Result<JcaResponse> {
+        if params.start_date.is_empty() {
+            return Err(CufinderError::ValidationError("start_date is required".to_string()));
+        }
+        if params.end_date.is_empty() {
+            return Err(CufinderError::ValidationError("end_date is required".to_string()));
+        }
+
+        let response = self.client.post("/jca", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// CLF Service - Contact Lookalikes API
+    pub async fn find_contact_lookalikes(&self, params: ClfParams) -> Result<ClfResponse> {
+        if params.query.is_empty() {
+            return Err(CufinderError::ValidationError("query is required".to_string()));
+        }
+
+        let response = self.client.post("/clf", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// NAP Service - Person Name Normalizer
+    pub async fn normalize_person_name(&self, params: NapParams) -> Result<NapResponse> {
+        if params.person_name.is_empty() {
+            return Err(CufinderError::ValidationError("person_name is required".to_string()));
+        }
+
+        let response = self.client.post("/nap", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// NAU Service - URL Normalizer
+    pub async fn normalize_url(&self, params: NauParams) -> Result<NauResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/nau", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// GDC Service - Gives Demo Checker
+    pub async fn gives_demo(&self, params: GdcParams) -> Result<GdcResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/gdc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
+
+    /// COT Service - Offers Free Trial Checker
+    pub async fn offers_free_trial(&self, params: CotParams) -> Result<CotResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/cot", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

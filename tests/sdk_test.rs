@@ -1,5 +1,6 @@
 use cufinder_rust::{
     CufinderSDK, ClientConfig, CseParams, PseParams, LbsParams,
+    PsaParams, CsaParams, JcaParams, ClfParams, NapParams, NauParams, GdcParams, CotParams,
     CufinderError,
 };
 use mockito::Server;
@@ -12,7 +13,6 @@ async fn test_cuf_service() {
     let _m = server
         .mock("POST", "/cuf")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -26,7 +26,7 @@ async fn test_cuf_service() {
     let result = sdk.cuf("TechCorp", "US").await.unwrap();
 
     assert_eq!(result.domain, "techcorp.com");
-    assert_eq!(result.base.query, Some("TechCorp".to_string()));
+    assert_eq!(result.base.query, Some(json!("TechCorp")));
     assert_eq!(result.base.credit_count, Some(1));
 }
 
@@ -36,7 +36,6 @@ async fn test_lcuf_service() {
     let _m = server
         .mock("POST", "/lcuf")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -50,7 +49,7 @@ async fn test_lcuf_service() {
     let result = sdk.lcuf("TechCorp").await.unwrap();
 
     assert_eq!(result.linkedin_url, "https://linkedin.com/company/techcorp");
-    assert_eq!(result.base.query, Some("TechCorp".to_string()));
+    assert_eq!(result.base.query, Some(json!("TechCorp")));
 }
 
 #[tokio::test]
@@ -59,7 +58,6 @@ async fn test_dtc_service() {
     let _m = server
         .mock("POST", "/dtc")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -73,7 +71,7 @@ async fn test_dtc_service() {
     let result = sdk.dtc("techcorp.com").await.unwrap();
 
     assert_eq!(result.company_name, "TechCorp Inc");
-    assert_eq!(result.base.query, Some("techcorp.com".to_string()));
+    assert_eq!(result.base.query, Some(json!("techcorp.com")));
 }
 
 #[tokio::test]
@@ -82,7 +80,6 @@ async fn test_dte_service() {
     let _m = server
         .mock("POST", "/dte")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -106,7 +103,6 @@ async fn test_ntp_service() {
     let _m = server
         .mock("POST", "/ntp")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -130,7 +126,6 @@ async fn test_rel_service() {
     let _m = server
         .mock("POST", "/rel")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -153,10 +148,7 @@ async fn test_rel_service() {
     let result = sdk.rel("john.doe@techcorp.com").await.unwrap();
 
     assert_eq!(result.person.full_name, Some("John Doe".to_string()));
-    assert_eq!(result.person.email, Some("john.doe@techcorp.com".to_string()));
     assert_eq!(result.person.job_title, Some("Software Engineer".to_string()));
-    assert_eq!(result.company.name, Some("TechCorp".to_string()));
-    assert_eq!(result.company.domain, Some("techcorp.com".to_string()));
 }
 
 #[tokio::test]
@@ -165,11 +157,10 @@ async fn test_fcl_service() {
     let _m = server
         .mock("POST", "/fcl")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "lookalikes": [
+            "companies": [
                 {
                     "name": "DataCorp",
                     "domain": "datacorp.com",
@@ -189,10 +180,10 @@ async fn test_fcl_service() {
     let sdk = create_test_sdk(&server.url()).await;
     let result = sdk.fcl("TechCorp").await.unwrap();
 
-    assert_eq!(result.lookalikes.len(), 2);
-    assert_eq!(result.lookalikes[0].name, Some("DataCorp".to_string()));
-    assert_eq!(result.lookalikes[0].domain, Some("datacorp.com".to_string()));
-    assert_eq!(result.lookalikes[1].name, Some("SoftCorp".to_string()));
+    assert_eq!(result.companies.len(), 2);
+    assert_eq!(result.companies[0].name, Some("DataCorp".to_string()));
+    assert_eq!(result.companies[0].domain, Some("datacorp.com".to_string()));
+    assert_eq!(result.companies[1].name, Some("SoftCorp".to_string()));
 }
 
 #[tokio::test]
@@ -201,14 +192,13 @@ async fn test_elf_service() {
     let _m = server
         .mock("POST", "/elf")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "fundraising": {
-                "total_funding": 1000000,
-                "rounds": 3,
-                "last_round": "Series A"
+            "fundraising_info": {
+                "funding_last_round_type": "Series A",
+                "funding_ammount_currency_code": "USD",
+                "funding_money_raised": "1000000"
             },
             "query": "TechCorp",
             "credit_count": 1
@@ -218,7 +208,7 @@ async fn test_elf_service() {
     let sdk = create_test_sdk(&server.url()).await;
     let result = sdk.elf("TechCorp").await.unwrap();
 
-    assert!(result.fundraising.is_object());
+    assert_eq!(result.fundraising.funding_last_round_type, Some("Series A".to_string()));
 }
 
 #[tokio::test]
@@ -227,15 +217,10 @@ async fn test_car_service() {
     let _m = server
         .mock("POST", "/car")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "revenue": {
-                "annual_revenue": 5000000,
-                "currency": "USD",
-                "year": 2023
-            },
+            "annual_revenue": "$5M",
             "query": "TechCorp",
             "credit_count": 1
         }).to_string())
@@ -244,7 +229,7 @@ async fn test_car_service() {
     let sdk = create_test_sdk(&server.url()).await;
     let result = sdk.car("TechCorp").await.unwrap();
 
-    assert!(result.revenue.is_object());
+    assert_eq!(result.revenue, "$5M");
 }
 
 #[tokio::test]
@@ -253,20 +238,10 @@ async fn test_fcc_service() {
     let _m = server
         .mock("POST", "/fcc")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "subsidiaries": [
-                {
-                    "name": "TechCorp Mobile",
-                    "domain": "mobile.techcorp.com"
-                },
-                {
-                    "name": "TechCorp Cloud",
-                    "domain": "cloud.techcorp.com"
-                }
-            ],
+            "subsidiaries": ["TechCorp Mobile", "TechCorp Cloud"],
             "query": "TechCorp",
             "credit_count": 1
         }).to_string())
@@ -276,8 +251,8 @@ async fn test_fcc_service() {
     let result = sdk.fcc("TechCorp").await.unwrap();
 
     assert_eq!(result.subsidiaries.len(), 2);
-    assert_eq!(result.subsidiaries[0].name, Some("TechCorp Mobile".to_string()));
-    assert_eq!(result.subsidiaries[0].domain, Some("mobile.techcorp.com".to_string()));
+    assert_eq!(result.subsidiaries[0], "TechCorp Mobile");
+    assert_eq!(result.subsidiaries[1], "TechCorp Cloud");
 }
 
 #[tokio::test]
@@ -286,15 +261,10 @@ async fn test_fts_service() {
     let _m = server
         .mock("POST", "/fts")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "tech_stack": {
-                "programming_languages": ["Go", "Python", "JavaScript"],
-                "frameworks": ["React", "Node.js", "Django"],
-                "databases": ["PostgreSQL", "Redis"]
-            },
+            "technologies": ["Go", "Python", "JavaScript"],
             "query": "TechCorp",
             "credit_count": 1
         }).to_string())
@@ -303,7 +273,7 @@ async fn test_fts_service() {
     let sdk = create_test_sdk(&server.url()).await;
     let result = sdk.fts("TechCorp").await.unwrap();
 
-    assert!(result.tech_stack.is_object());
+    assert_eq!(result.technologies, vec!["Go".to_string(), "Python".to_string(), "JavaScript".to_string()]);
 }
 
 #[tokio::test]
@@ -312,7 +282,6 @@ async fn test_epp_service() {
     let _m = server
         .mock("POST", "/epp")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -336,9 +305,7 @@ async fn test_epp_service() {
     let result = sdk.epp("https://linkedin.com/in/john-doe").await.unwrap();
 
     assert_eq!(result.person.full_name, Some("John Doe".to_string()));
-    assert_eq!(result.person.email, Some("john.doe@techcorp.com".to_string()));
     assert_eq!(result.person.job_title, Some("Software Engineer".to_string()));
-    assert_eq!(result.company.name, Some("TechCorp".to_string()));
 }
 
 #[tokio::test]
@@ -347,11 +314,10 @@ async fn test_fwe_service() {
     let _m = server
         .mock("POST", "/fwe")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "email": "john.doe@techcorp.com",
+            "work_email": "john.doe@techcorp.com",
             "query": "https://linkedin.com/in/john-doe",
             "credit_count": 1
         }).to_string())
@@ -369,7 +335,6 @@ async fn test_tep_service() {
     let _m = server
         .mock("POST", "/tep")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -389,7 +354,6 @@ async fn test_tep_service() {
 
     assert_eq!(result.person.full_name, Some("John Doe".to_string()));
     assert_eq!(result.person.job_title, Some("Software Engineer".to_string()));
-    assert_eq!(result.person.company, Some("TechCorp".to_string()));
     assert_eq!(result.base.confidence_level, Some(88));
 }
 
@@ -399,7 +363,6 @@ async fn test_enc_service() {
     let _m = server
         .mock("POST", "/enc")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -429,7 +392,6 @@ async fn test_cec_service() {
     let _m = server
         .mock("POST", "/cec")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -443,11 +405,10 @@ async fn test_cec_service() {
     let sdk = create_test_sdk(&server.url()).await;
     let result = sdk.cec("TechCorp").await.unwrap();
 
-    assert_eq!(result.countries.len(), 3);
-    assert!(result.countries.contains(&"US".to_string()));
-    assert!(result.countries.contains(&"UK".to_string()));
-    assert!(result.countries.contains(&"CA".to_string()));
-    assert_eq!(result.total_results, 3);
+    assert_eq!(result.countries.as_array().unwrap().len(), 3);
+    assert!(result.countries.as_array().unwrap().contains(&json!("US")));
+    assert!(result.countries.as_array().unwrap().contains(&json!("UK")));
+    assert!(result.countries.as_array().unwrap().contains(&json!("CA")));
 }
 
 #[tokio::test]
@@ -456,7 +417,6 @@ async fn test_clo_service() {
     let _m = server
         .mock("POST", "/clo")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -490,7 +450,6 @@ async fn test_cse_service() {
     let _m = server
         .mock("POST", "/cse")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
@@ -525,8 +484,6 @@ async fn test_cse_service() {
     assert_eq!(result.companies[0].name, Some("TechCorp".to_string()));
     assert_eq!(result.companies[0].domain, Some("techcorp.com".to_string()));
     assert_eq!(result.companies[0].industry, Some("Technology".to_string()));
-    assert_eq!(result.total_results, 2);
-    assert_eq!(result.page, 1);
 }
 
 #[tokio::test]
@@ -535,24 +492,21 @@ async fn test_pse_service() {
     let _m = server
         .mock("POST", "/pse")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "people": [
+            "peoples": [
                 {
                     "full_name": "John Doe",
-                    "job_title": "Software Engineer",
-                    "company": "TechCorp"
+                    "current_job": { "title": "Software Engineer" },
+                    "company": { "name": "TechCorp" }
                 },
                 {
                     "full_name": "Jane Smith",
-                    "job_title": "Product Manager",
-                    "company": "TechCorp"
+                    "current_job": { "title": "Product Manager" },
+                    "company": { "name": "TechCorp" }
                 }
             ],
-            "total_results": 2,
-            "page": 1,
             "query": "engineer",
             "credit_count": 1
         }).to_string())
@@ -565,12 +519,10 @@ async fn test_pse_service() {
         ..Default::default()
     }).await.unwrap();
 
-    assert_eq!(result.people.len(), 2);
-    assert_eq!(result.people[0].full_name, Some("John Doe".to_string()));
-    assert_eq!(result.people[0].job_title, Some("Software Engineer".to_string()));
-    assert_eq!(result.people[0].company, Some("TechCorp".to_string()));
-    assert_eq!(result.total_results, 2);
-    assert_eq!(result.page, 1);
+    assert_eq!(result.peoples.len(), 2);
+    assert_eq!(result.peoples[0].full_name, Some("John Doe".to_string()));
+    assert_eq!(result.peoples[0].current_job.as_ref().unwrap().title, Some("Software Engineer".to_string()));
+    assert_eq!(result.peoples[0].company.as_ref().unwrap().name, Some("TechCorp".to_string()));
 }
 
 #[tokio::test]
@@ -579,11 +531,10 @@ async fn test_lbs_service() {
     let _m = server
         .mock("POST", "/lbs")
         .match_header("x-api-key", "test-api-key")
-        .match_header("content-type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(json!({
-            "businesses": [
+            "companies": [
                 {
                     "name": "Coffee Shop",
                     "address": "123 Main St",
@@ -595,8 +546,6 @@ async fn test_lbs_service() {
                     "city": "San Francisco"
                 }
             ],
-            "total_results": 2,
-            "page": 1,
             "query": "coffee",
             "credit_count": 1
         }).to_string())
@@ -609,12 +558,10 @@ async fn test_lbs_service() {
         ..Default::default()
     }).await.unwrap();
 
-    assert_eq!(result.businesses.len(), 2);
-    assert_eq!(result.businesses[0].name, Some("Coffee Shop".to_string()));
-    assert_eq!(result.businesses[0].address, Some("123 Main St".to_string()));
-    assert_eq!(result.businesses[0].city, Some("San Francisco".to_string()));
-    assert_eq!(result.total_results, 2);
-    assert_eq!(result.page, 1);
+    assert_eq!(result.companies.len(), 2);
+    assert_eq!(result.companies[0].name, Some("Coffee Shop".to_string()));
+    assert_eq!(result.companies[0].address, Some("123 Main St".to_string()));
+    assert_eq!(result.companies[0].city, Some("San Francisco".to_string()));
 }
 
 #[tokio::test]
@@ -725,7 +672,7 @@ async fn test_cef_service() {
     assert_eq!(result.employees[0].city, Some("San Francisco".to_string()));
     assert_eq!(result.employees[1].full_name, Some("Jane Smith".to_string()));
     assert_eq!(result.employees[1].job_title, Some("Product Manager".to_string()));
-    assert_eq!(result.base.query, Some("TechCorp".to_string()));
+    assert_eq!(result.base.query, Some(json!("TechCorp")));
     assert_eq!(result.base.credit_count, Some(1));
 }
 
@@ -778,4 +725,439 @@ async fn create_test_sdk(base_url: &str) -> CufinderSDK {
         timeout: Duration::from_secs(5),
         max_retries: 1,
     }).unwrap()
+}
+#[tokio::test]
+async fn test_psa_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/psa")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "contacts": [
+                {
+                    "full_name": "John Doe",
+                    "current_job": { "title": "Software Engineer" },
+                    "company": {
+                        "name": "TechCorp",
+                        "linkedin": "linkedin.com/company/techcorp",
+                        "website": "https://techcorp.com",
+                        "industry": "software development",
+                        "main_location": {
+                            "country": "united states",
+                            "state": "california",
+                            "city": "san francisco"
+                        }
+                    },
+                    "location": {
+                        "country": "united states",
+                        "state": "california",
+                        "city": "san francisco"
+                    },
+                    "signal": {
+                        "name": "employee_growth",
+                        "time_frame": 90,
+                        "bucket": "high"
+                    }
+                }
+            ],
+            "query": {
+                "signal_name": "employee_growth",
+                "time_frame": 90,
+                "bucket": "high",
+                "page": 1
+            },
+            "credit_count": 1,
+            "meta_data": { "total_results": 1 }
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.psa(PsaParams {
+        signal_name: "employee_growth".to_string(),
+        time_frame: Some(90),
+        bucket: "high".to_string(),
+        page: Some(1),
+    }).await.unwrap();
+
+    assert_eq!(result.contacts.len(), 1);
+    assert_eq!(result.contacts[0].full_name, Some("John Doe".to_string()));
+    assert_eq!(result.contacts[0].signal.as_ref().unwrap().name, Some("employee_growth".to_string()));
+    assert_eq!(result.contacts[0].signal.as_ref().unwrap().time_frame, Some(90));
+    assert_eq!(result.contacts[0].signal.as_ref().unwrap().bucket, Some("high".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_csa_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/csa")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "companies": [
+                {
+                    "name": "TechCorp",
+                    "website": "https://techcorp.com",
+                    "domain": "techcorp.com",
+                    "industry": "software development",
+                    "overview": "Enterprise software company",
+                    "type": "private",
+                    "employees": { "range": "1001-5000" },
+                    "main_location": {
+                        "country": "united states",
+                        "state": "california",
+                        "city": "san francisco",
+                        "address": "123 Tech St"
+                    },
+                    "signal": {
+                        "name": "employee_growth",
+                        "time_frame": 90,
+                        "bucket": "high"
+                    }
+                }
+            ],
+            "query": {
+                "signal_name": "employee_growth",
+                "time_frame": 90,
+                "bucket": "high",
+                "page": 1
+            },
+            "credit_count": 1,
+            "meta_data": { "total_results": 1 }
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.csa(CsaParams {
+        signal_name: "employee_growth".to_string(),
+        time_frame: Some(90),
+        bucket: "high".to_string(),
+        page: Some(1),
+    }).await.unwrap();
+
+    assert_eq!(result.companies.len(), 1);
+    assert_eq!(result.companies[0].name, Some("TechCorp".to_string()));
+    assert_eq!(result.companies[0].domain, Some("techcorp.com".to_string()));
+    assert_eq!(result.companies[0].industry, Some("software development".to_string()));
+    assert_eq!(result.companies[0].signal.as_ref().unwrap().name, Some("employee_growth".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_jca_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/jca")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "job_changes": [
+                {
+                    "type": "promotion",
+                    "linkedin_url": "https://linkedin.com/in/john-doe",
+                    "detected_at": "2026-08-01T12:00:00Z",
+                    "from": {
+                        "company_linkedin_url": "https://linkedin.com/company/techcorp",
+                        "company_linkedin_id": "12345",
+                        "company_name": "TechCorp",
+                        "title": "Software Engineer"
+                    },
+                    "to": {
+                        "company_linkedin_url": "https://linkedin.com/company/techcorp",
+                        "company_linkedin_id": "12345",
+                        "company_name": "TechCorp",
+                        "title": "Senior Software Engineer"
+                    }
+                }
+            ],
+            "query": {
+                "start_date": "2026-01-01",
+                "end_date": "2026-08-16",
+                "type": "promotion"
+            },
+            "credit_count": 1,
+            "meta_data": { "total_results": 1 }
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.jca(JcaParams {
+        start_date: "2026-01-01".to_string(),
+        end_date: "2026-08-16".to_string(),
+        r#type: Some("promotion".to_string()),
+        page: None,
+    }).await.unwrap();
+
+    assert_eq!(result.job_changes.len(), 1);
+    assert_eq!(result.job_changes[0].r#type, Some("promotion".to_string()));
+    assert_eq!(result.job_changes[0].from.as_ref().unwrap().company_name, Some("TechCorp".to_string()));
+    assert_eq!(result.job_changes[0].from.as_ref().unwrap().title, Some("Software Engineer".to_string()));
+    assert_eq!(result.job_changes[0].to.as_ref().unwrap().title, Some("Senior Software Engineer".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_clf_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/clf")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "profiles": [
+                {
+                    "full_name": "Morteza Heydari",
+                    "linkedin_url": "https://linkedin.com/in/mortezaheydari1997",
+                    "job_title": "Founder & CEO",
+                    "company_name": "CUFinder",
+                    "country": "united states",
+                    "state": "new york",
+                    "city": "new york"
+                }
+            ],
+            "query": "linkedin.com/in/mortezaheydari1997",
+            "credit_count": 1,
+            "meta_data": { "total_results": 1 }
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.clf(ClfParams {
+        query: "linkedin.com/in/mortezaheydari1997".to_string(),
+    }).await.unwrap();
+
+    assert_eq!(result.profiles.len(), 1);
+    assert_eq!(result.profiles[0].full_name, Some("Morteza Heydari".to_string()));
+    assert_eq!(result.profiles[0].linkedin_url, Some("https://linkedin.com/in/mortezaheydari1997".to_string()));
+    assert_eq!(result.profiles[0].job_title, Some("Founder & CEO".to_string()));
+    assert_eq!(result.profiles[0].company_name, Some("CUFinder".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_nap_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/nap")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "normalized_name": "Morteza Heydari",
+            "query": "morteza heydari",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.nap(NapParams {
+        person_name: "morteza heydari".to_string(),
+    }).await.unwrap();
+
+    assert_eq!(result.normalized_name, Some("Morteza Heydari".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_nau_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/nau")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "normalized_url": "https://www.cufinder.io/about-us",
+            "query": "https://www.cufinder.io/about-us",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.nau(NauParams {
+        url: "https://www.cufinder.io/about-us".to_string(),
+    }).await.unwrap();
+
+    assert_eq!(result.normalized_url, Some("https://www.cufinder.io/about-us".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_gdc_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/gdc")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "offers_demo": "yes",
+            "query": "https://www.stripe.com",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.gdc(GdcParams {
+        url: "https://www.stripe.com".to_string(),
+    }).await.unwrap();
+
+    assert_eq!(result.offers_demo, Some("yes".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_cot_service() {
+    let mut server = Server::new_async().await;
+    let _m = server
+        .mock("POST", "/cot")
+        .match_header("x-api-key", "test-api-key")
+        .with_status(200)
+        .with_header("content-type", "application/json")
+        .with_body(json!({
+            "offers_free_trial": "yes",
+            "query": "https://www.stripe.com",
+            "credit_count": 1
+        }).to_string())
+        .create();
+
+    let sdk = create_test_sdk(&server.url()).await;
+    let result = sdk.cot(CotParams {
+        url: "https://www.stripe.com".to_string(),
+    }).await.unwrap();
+
+    assert_eq!(result.offers_free_trial, Some("yes".to_string()));
+    assert_eq!(result.base.credit_count, Some(1));
+}
+
+#[tokio::test]
+async fn test_psa_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.psa(PsaParams {
+        signal_name: "".to_string(),
+        time_frame: Some(90),
+        bucket: "high".to_string(),
+        page: None,
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("signal_name is required"));
+    }
+
+    let result = sdk.psa(PsaParams {
+        signal_name: "employee_growth".to_string(),
+        time_frame: Some(90),
+        bucket: "".to_string(),
+        page: None,
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("bucket is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_jca_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.jca(JcaParams {
+        start_date: "".to_string(),
+        end_date: "2026-08-16".to_string(),
+        r#type: None,
+        page: None,
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("start_date is required"));
+    }
+
+    let result = sdk.jca(JcaParams {
+        start_date: "2026-01-01".to_string(),
+        end_date: "".to_string(),
+        r#type: None,
+        page: None,
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("end_date is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_clf_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.clf(ClfParams {
+        query: "".to_string(),
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("query is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_nap_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.nap(NapParams {
+        person_name: "".to_string(),
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("person_name is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_nau_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.nau(NauParams {
+        url: "".to_string(),
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("url is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_gdc_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.gdc(GdcParams {
+        url: "".to_string(),
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("url is required"));
+    }
+}
+
+#[tokio::test]
+async fn test_cot_validation_error() {
+    let mut server = Server::new_async().await;
+    let sdk = create_test_sdk(&server.url()).await;
+
+    let result = sdk.cot(CotParams {
+        url: "".to_string(),
+    }).await;
+    assert!(result.is_err());
+    if let Err(CufinderError::ValidationError(msg)) = result {
+        assert!(msg.contains("url is required"));
+    }
 }

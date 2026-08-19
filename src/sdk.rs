@@ -265,4 +265,44 @@ impl CufinderSDK {
     pub async fn cja(&self, params: CjaParams) -> Result<CjaResponse> {
         self.service.get_company_jobs(params).await
     }
+
+    /// PSA - Contact Signals API
+    pub async fn psa(&self, params: PsaParams) -> Result<PsaResponse> {
+        self.service.get_contact_signals(params).await
+    }
+
+    /// CSA - Company Signals API
+    pub async fn csa(&self, params: CsaParams) -> Result<CsaResponse> {
+        self.service.get_company_signals(params).await
+    }
+
+    /// JCA - Job Changes API
+    pub async fn jca(&self, params: JcaParams) -> Result<JcaResponse> {
+        self.service.get_job_changes(params).await
+    }
+
+    /// CLF - Contact Lookalikes API
+    pub async fn clf(&self, params: ClfParams) -> Result<ClfResponse> {
+        self.service.find_contact_lookalikes(params).await
+    }
+
+    /// NAP - Person Name Normalizer
+    pub async fn nap(&self, params: NapParams) -> Result<NapResponse> {
+        self.service.normalize_person_name(params).await
+    }
+
+    /// NAU - URL Normalizer
+    pub async fn nau(&self, params: NauParams) -> Result<NauResponse> {
+        self.service.normalize_url(params).await
+    }
+
+    /// GDC - Gives Demo Checker
+    pub async fn gdc(&self, params: GdcParams) -> Result<GdcResponse> {
+        self.service.gives_demo(params).await
+    }
+
+    /// COT - Offers Free Trial Checker
+    pub async fn cot(&self, params: CotParams) -> Result<CotResponse> {
+        self.service.offers_free_trial(params).await
+    }
 }

@@ -977,3 +977,236 @@ pub struct CjaParams {
     pub annual_revenue_max: Option<i32>,
     pub page: Option<i32>,
 }
+// PSA Service - Contact Signals API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Signal {
+    pub name: Option<String>,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContactSignal {
+    #[serde(rename = "full_name")]
+    pub full_name: Option<String>,
+    #[serde(rename = "current_job")]
+    pub current_job: Option<serde_json::Value>,
+    pub company: Option<serde_json::Value>,
+    pub location: Option<serde_json::Value>,
+    pub social: Option<serde_json::Value>,
+    pub signal: Option<Signal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PsaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub contacts: Vec<ContactSignal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct PsaParams {
+    #[serde(rename = "signal_name")]
+    pub signal_name: String,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: String,
+    pub page: Option<i32>,
+}
+
+// CSA Service - Company Signals API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompanySignal {
+    pub name: Option<String>,
+    pub website: Option<String>,
+    pub domain: Option<String>,
+    pub employees: Option<serde_json::Value>,
+    pub industry: Option<String>,
+    pub overview: Option<String>,
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    #[serde(rename = "main_location")]
+    pub main_location: Option<serde_json::Value>,
+    pub social: Option<serde_json::Value>,
+    pub signal: Option<Signal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CsaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub companies: Vec<CompanySignal>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CsaParams {
+    #[serde(rename = "signal_name")]
+    pub signal_name: String,
+    #[serde(rename = "time_frame")]
+    pub time_frame: Option<i32>,
+    pub bucket: String,
+    pub page: Option<i32>,
+}
+
+// JCA Service - Job Changes API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JobChangeCompanySnapshot {
+    #[serde(rename = "company_linkedin_url")]
+    pub company_linkedin_url: Option<String>,
+    #[serde(rename = "company_linkedin_id")]
+    pub company_linkedin_id: Option<String>,
+    #[serde(rename = "company_name")]
+    pub company_name: Option<String>,
+    pub title: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JobChange {
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    #[serde(rename = "linkedin_url")]
+    pub linkedin_url: Option<String>,
+    #[serde(rename = "detected_at")]
+    pub detected_at: Option<String>,
+    pub from: Option<JobChangeCompanySnapshot>,
+    pub to: Option<JobChangeCompanySnapshot>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JcaResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "job_changes")]
+    #[serde(default)]
+    pub job_changes: Vec<JobChange>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct JcaParams {
+    #[serde(rename = "start_date")]
+    pub start_date: String,
+    #[serde(rename = "end_date")]
+    pub end_date: String,
+    #[serde(rename = "type")]
+    pub r#type: Option<String>,
+    pub page: Option<i32>,
+}
+
+// CLF Service - Contact Lookalikes API
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClfProfile {
+    #[serde(rename = "first_name")]
+    pub first_name: Option<String>,
+    #[serde(rename = "last_name")]
+    pub last_name: Option<String>,
+    #[serde(rename = "full_name")]
+    pub full_name: Option<String>,
+    #[serde(rename = "linkedin_url")]
+    pub linkedin_url: Option<String>,
+    pub summary: Option<String>,
+    #[serde(rename = "followers_count")]
+    pub followers_count: Option<i32>,
+    pub facebook: Option<String>,
+    pub twitter: Option<String>,
+    pub avatar: Option<String>,
+    pub country: Option<String>,
+    pub state: Option<String>,
+    pub city: Option<String>,
+    #[serde(rename = "job_title")]
+    pub job_title: Option<String>,
+    #[serde(rename = "job_title_categories")]
+    pub job_title_categories: Option<Vec<String>>,
+    #[serde(rename = "company_name")]
+    pub company_name: Option<String>,
+    #[serde(rename = "company_linkedin")]
+    pub company_linkedin: Option<String>,
+    #[serde(rename = "company_website")]
+    pub company_website: Option<String>,
+    #[serde(rename = "company_size")]
+    pub company_size: Option<String>,
+    #[serde(rename = "company_industry")]
+    pub company_industry: Option<String>,
+    #[serde(rename = "company_facebook")]
+    pub company_facebook: Option<String>,
+    #[serde(rename = "company_twitter")]
+    pub company_twitter: Option<String>,
+    #[serde(rename = "company_country")]
+    pub company_country: Option<String>,
+    #[serde(rename = "company_state")]
+    pub company_state: Option<String>,
+    #[serde(rename = "company_city")]
+    pub company_city: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClfResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(default)]
+    pub profiles: Vec<ClfProfile>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ClfParams {
+    pub query: String,
+}
+
+// NAP Service - Person Name Normalizer
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NapResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "normalized_name")]
+    pub normalized_name: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct NapParams {
+    #[serde(rename = "person_name")]
+    pub person_name: String,
+}
+
+// NAU Service - URL Normalizer
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NauResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "normalized_url")]
+    pub normalized_url: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct NauParams {
+    pub url: String,
+}
+
+// GDC Service - Gives Demo Checker
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GdcResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "offers_demo")]
+    pub offers_demo: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GdcParams {
+    pub url: String,
+}
+
+// COT Service - Offers Free Trial Checker
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CotResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "offers_free_trial")]
+    pub offers_free_trial: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CotParams {
+    pub url: String,
+}
