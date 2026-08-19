@@ -1196,3 +1196,17 @@ pub struct GdcResponse {
 pub struct GdcParams {
     pub url: String,
 }
+
+// COT Service - Offers Free Trial Checker
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CotResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "offers_free_trial")]
+    pub offers_free_trial: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct CotParams {
+    pub url: String,
+}

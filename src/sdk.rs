@@ -300,4 +300,9 @@ impl CufinderSDK {
     pub async fn gdc(&self, params: GdcParams) -> Result<GdcResponse> {
         self.service.gives_demo(params).await
     }
+
+    /// COT - Offers Free Trial Checker
+    pub async fn cot(&self, params: CotParams) -> Result<CotResponse> {
+        self.service.offers_free_trial(params).await
+    }
 }

@@ -403,4 +403,14 @@ impl Service {
         let response = self.client.post("/gdc", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// COT Service - Offers Free Trial Checker
+    pub async fn offers_free_trial(&self, params: CotParams) -> Result<CotResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/cot", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }
