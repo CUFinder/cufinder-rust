@@ -1182,3 +1182,17 @@ pub struct NauResponse {
 pub struct NauParams {
     pub url: String,
 }
+
+// GDC Service - Gives Demo Checker
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GdcResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "offers_demo")]
+    pub offers_demo: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GdcParams {
+    pub url: String,
+}

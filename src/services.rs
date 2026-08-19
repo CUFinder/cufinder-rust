@@ -393,4 +393,14 @@ impl Service {
         let response = self.client.post("/nau", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// GDC Service - Gives Demo Checker
+    pub async fn gives_demo(&self, params: GdcParams) -> Result<GdcResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/gdc", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

@@ -295,4 +295,9 @@ impl CufinderSDK {
     pub async fn nau(&self, params: NauParams) -> Result<NauResponse> {
         self.service.normalize_url(params).await
     }
+
+    /// GDC - Gives Demo Checker
+    pub async fn gdc(&self, params: GdcParams) -> Result<GdcResponse> {
+        self.service.gives_demo(params).await
+    }
 }
