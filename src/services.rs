@@ -383,4 +383,14 @@ impl Service {
         let response = self.client.post("/nap", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// NAU Service - URL Normalizer
+    pub async fn normalize_url(&self, params: NauParams) -> Result<NauResponse> {
+        if params.url.is_empty() {
+            return Err(CufinderError::ValidationError("url is required".to_string()));
+        }
+
+        let response = self.client.post("/nau", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

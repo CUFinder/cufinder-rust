@@ -1168,3 +1168,17 @@ pub struct NapParams {
     #[serde(rename = "person_name")]
     pub person_name: String,
 }
+
+// NAU Service - URL Normalizer
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NauResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "normalized_url")]
+    pub normalized_url: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct NauParams {
+    pub url: String,
+}

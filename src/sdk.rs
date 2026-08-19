@@ -290,4 +290,9 @@ impl CufinderSDK {
     pub async fn nap(&self, params: NapParams) -> Result<NapResponse> {
         self.service.normalize_person_name(params).await
     }
+
+    /// NAU - URL Normalizer
+    pub async fn nau(&self, params: NauParams) -> Result<NauResponse> {
+        self.service.normalize_url(params).await
+    }
 }
