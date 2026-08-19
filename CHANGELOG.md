@@ -1,6 +1,12 @@
 # Cufinder Rust SDK Changelog
 
 
+## 1.3.0 (August 16, 2026)
+
+#### Features
+- **New services**: Add `PSA` (Contact Signals API), `CSA` (Company Signals API), `JCA` (Job Changes API), `CLF` (Contact Lookalikes API), `NAP` (Person Name Normalizer), `NAU` (URL Normalizer), `GDC` (Gives Demo Checker), and `COT` (Offers Free Trial Checker)
+
+
 ## 1.2.0 (June 21, 2026)
 
 #### Features
