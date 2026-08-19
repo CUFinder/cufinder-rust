@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## API Reference
 
-This SDK covers all 32 Cufinder API (v2) endpoints:
+This SDK covers all 40 Cufinder API (v2) endpoints:
 
 - **CUF** - [Company Name to Domain](https://apidoc.cufinder.io/apis/company-name-to-domain)
 - **LCUF** - [LinkedIn Company URL Finder](https://apidoc.cufinder.io/apis/company-linkedin-url-finder)
@@ -79,6 +79,14 @@ This SDK covers all 32 Cufinder API (v2) endpoints:
 - **NAC** - [Company Name Normalizer](https://apidoc.cufinder.io/apis/company-name-normalizer)
 - **CAA** - [Company Activity API](https://apidoc.cufinder.io/apis/company-activity-api)
 - **CJA** - [Company Jobs API](https://apidoc.cufinder.io/apis/company-jobs-api)
+- **PSA** - [Contact Signals API](https://apidoc.cufinder.io/apis/contact-signals-api)
+- **CSA** - [Company Signals API](https://apidoc.cufinder.io/apis/company-signals-api)
+- **JCA** - [Job Changes API](https://apidoc.cufinder.io/apis/job-changes-api)
+- **CLF** - [Contact Lookalikes API](https://apidoc.cufinder.io/apis/contact-lookalikes-api)
+- **NAP** - [Person Name Normalizer](https://apidoc.cufinder.io/apis/person-name-normalizer)
+- **NAU** - [URL Normalizer](https://apidoc.cufinder.io/apis/url-normalizer)
+- **GDC** - [Gives Demo Checker](https://apidoc.cufinder.io/apis/gives-demo-checker)
+- **COT** - [Offers Free Trial Checker](https://apidoc.cufinder.io/apis/offers-free-trial-checker)
 
 
 **CUF - Company Name to Domain**
@@ -400,6 +408,127 @@ let result = sdk.cja(CjaParams {
 for item in &result.jobs {
     println!("{:?} - {:?}", item.company.name, item.job.title);
 }
+```
+
+**PSA - Contact Signals API**
+
+Find contacts based on company signals.
+
+```rust
+use cufinder_rust::PsaParams;
+
+let result = sdk.psa(PsaParams {
+    signal_name: "employee_growth".to_string(),
+    time_frame: Some(90),
+    bucket: "high".to_string(),
+    page: Some(1),
+}).await?;
+for contact in &result.contacts {
+    println!("{:?}", contact.full_name);
+}
+```
+
+**CSA - Company Signals API**
+
+Find companies based on signals.
+
+```rust
+use cufinder_rust::CsaParams;
+
+let result = sdk.csa(CsaParams {
+    signal_name: "employee_growth".to_string(),
+    time_frame: Some(90),
+    bucket: "high".to_string(),
+    page: Some(1),
+}).await?;
+for company in &result.companies {
+    println!("{:?} - {:?}", company.name, company.domain);
+}
+```
+
+**JCA - Job Changes API**
+
+Find job changes within a date range.
+
+```rust
+use cufinder_rust::JcaParams;
+
+let result = sdk.jca(JcaParams {
+    start_date: "2026-01-01".to_string(),
+    end_date: "2026-08-16".to_string(),
+    r#type: Some("promotion".to_string()),
+    page: None,
+}).await?;
+for change in &result.job_changes {
+    println!("{:?}", change.r#type);
+}
+```
+
+**CLF - Contact Lookalikes API**
+
+Find similar contacts based on a query.
+
+```rust
+use cufinder_rust::ClfParams;
+
+let result = sdk.clf(ClfParams {
+    query: "linkedin.com/in/mortezaheydari1997".to_string(),
+}).await?;
+for profile in &result.profiles {
+    println!("{:?} - {:?}", profile.full_name, profile.company_name);
+}
+```
+
+**NAP - Person Name Normalizer**
+
+Normalize a person name.
+
+```rust
+use cufinder_rust::NapParams;
+
+let result = sdk.nap(NapParams {
+    person_name: "morteza heydari".to_string(),
+}).await?;
+println!("{:?}", result.normalized_name);
+```
+
+**NAU - URL Normalizer**
+
+Normalize a URL.
+
+```rust
+use cufinder_rust::NauParams;
+
+let result = sdk.nau(NauParams {
+    url: "https://www.cufinder.io/about-us".to_string(),
+}).await?;
+println!("{:?}", result.normalized_url);
+```
+
+**GDC - Gives Demo Checker**
+
+Check if a company offers demos.
+
+```rust
+use cufinder_rust::GdcParams;
+
+let result = sdk.gdc(GdcParams {
+    url: "https://www.stripe.com".to_string(),
+}).await?;
+println!("{:?}", result.offers_demo);
+```
+
+**COT - Offers Free Trial Checker**
+
+Check if a company offers a free trial.
+
+```rust
+use cufinder_rust::CotParams;
+
+let result = sdk.cot(CotParams {
+    url: "https://www.stripe.com".to_string(),
+}).await?;
+println!("{:?}", result.offers_free_trial);
 ```
 
 ## Error Handling
