@@ -1153,3 +1153,18 @@ pub struct ClfResponse {
 pub struct ClfParams {
     pub query: String,
 }
+
+// NAP Service - Person Name Normalizer
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NapResponse {
+    #[serde(flatten)]
+    pub base: BaseResponse,
+    #[serde(rename = "normalized_name")]
+    pub normalized_name: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct NapParams {
+    #[serde(rename = "person_name")]
+    pub person_name: String,
+}

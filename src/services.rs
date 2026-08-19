@@ -373,4 +373,14 @@ impl Service {
         let response = self.client.post("/clf", &params).await?;
         serde_json::from_value(response).map_err(CufinderError::JsonError)
     }
+
+    /// NAP Service - Person Name Normalizer
+    pub async fn normalize_person_name(&self, params: NapParams) -> Result<NapResponse> {
+        if params.person_name.is_empty() {
+            return Err(CufinderError::ValidationError("person_name is required".to_string()));
+        }
+
+        let response = self.client.post("/nap", &params).await?;
+        serde_json::from_value(response).map_err(CufinderError::JsonError)
+    }
 }

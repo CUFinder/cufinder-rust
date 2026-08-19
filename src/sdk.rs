@@ -285,4 +285,9 @@ impl CufinderSDK {
     pub async fn clf(&self, params: ClfParams) -> Result<ClfResponse> {
         self.service.find_contact_lookalikes(params).await
     }
+
+    /// NAP - Person Name Normalizer
+    pub async fn nap(&self, params: NapParams) -> Result<NapResponse> {
+        self.service.normalize_person_name(params).await
+    }
 }
